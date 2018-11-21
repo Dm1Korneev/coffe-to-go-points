@@ -1,0 +1,18 @@
+.map-card {
+    height: 350px;
+}
+
+#map {
+    height: 100%;
+}
+
+.card {
+    margin: 1rem 0;
+}
+
+.review {padding-bottom: 5px;}
+.card-body.review-container {padding-top: 0;padding-bottom: 0;}
+.review-header {margin-bottom: 10px;}
+.reviewAuthor {margin: 0 5px;}
+.reviewTimestamp {color: #ccc;}
+.review-panel {width: 100%}
