@@ -1,62 +1,25 @@
 extends layout
 
+include _includes/sharedHTMLfunctions
+
 block content
   .row
     .col-lg-6
-      h2 Coffe to Go
-        small &nbsp;Point whith cofee near you!
+      h2= pageHeader.title
+        small &nbsp;#{pageHeader.strapline}
   .row
     .col-xs-12.col-sm-8
       ul.list-group
-        li.list-group-item
-          h4
-            a(href="/location") Location1
-            small &nbsp;
-              span.fas.fa-star
-              span.fas.fa-star
-              span.fas.fa-star
-              span.far.fa-star
-              span.far.fa-star
-            span.badge.badge.badge-warning.float-right 100m
-          p.adress 125 ight Street, Reading, RG6 1PS
-          span.badge.badge-info Hot drinks
-          | &nbsp;
-          span.badge.badge-info Food
-          | &nbsp;
-          span.badge.badge-info Wi Fi
-        li.list-group-item
-          h4
-            a(href="/location") Location1
-            small &nbsp;
-              span.fas.fa-star
-              span.fas.fa-star
-              span.fas.fa-star
-              span.far.fa-star
-              span.far.fa-star
-            span.badge.badge.badge-warning.float-right 100m
-          p.adress 125 ight Street, Reading, RG6 1PS
-          span.badge.badge-info Hot drinks
-          | &nbsp;
-          span.badge.badge-info Food
-          | &nbsp;
-          span.badge.badge-info Wi Fi
-        li.list-group-item
-          h4
-            a(href="/location") Location1
-            small &nbsp;
-              span.fas.fa-star
-              span.fas.fa-star
-              span.fas.fa-star
-              span.far.fa-star
-              span.far.fa-star
-            span.badge.badge.badge-warning.float-right 100m
-          p.adress 125 ight Street, Reading, RG6 1PS
-          span.badge.badge-info Hot drinks
-          | &nbsp;
-          span.badge.badge-info Food
-          | &nbsp;
-          span.badge.badge-info Wi Fi    
+        each location in locations
+          li.list-group-item
+            h4
+              a(href="/location")= location.name
+              small &nbsp;
+              +outputRating(location.rating)
+              span.badge.badge.badge-warning.float-right= location.distance
+            p.adress= location.address
+            each facility in location.facilities
+              span.badge.badge-info= facility
+              | &nbsp;    
     .col-xs-12.col-sm-4
-      p. 
-        Looking for coffe to Go? We helps you to find some one. 
-        Lorem ge rgb ege rge g nerg le geler gej erkg ekg        
+      p= sidebar     
