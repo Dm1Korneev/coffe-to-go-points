@@ -1,3 +1,5 @@
+var mongoose = require('mongoose');
+
 module.exports.homeList = function (req, res, next) {
     res.render('location-list', {
         title: 'CoffeToGo - find place whith coffe to go',
