@@ -1,7 +1,10 @@
 require('./locations');
 var mongoose = require('mongoose');
 
-var dbURI = 'mongodb://localhost/CoffeToGo';
+var dbURI = 'mongodb://localhost/coffe-to-go-points';
+if (process.env.NODE_ENV === 'production') {
+    dbURI= process.env.MONGODB_URI;
+}
 mongoose.connect(dbURI, { useNewUrlParser: true });
 
 mongoose.connection.on('connected', function() {
