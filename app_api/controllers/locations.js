@@ -50,7 +50,34 @@ module.exports.locationsListByDistance = function (req, res, next) {
 }
 
 module.exports.locationsCreate = function (req, res, next) {
-    sendJsResponse(res, 200, { "status": "success" })
+    var facilities, openingTimes;
+
+    if (req.body.facilities) {
+        facilities = req.body.facilities.split(",");
+    }
+    if (req.body.days1) {
+        openingTimes = [{
+            days: req.body.days1,
+            opening: req.body.opening1,
+            closing: req.body.closing1,
+            closed: req.body.closed1,
+        }];
+    }
+
+    Loc.create({
+        name: req.body.name,
+        address: req.body.address,
+        facilities: facilities,
+        coords: [parseFloat(req.body.lng),
+                parseFloat(req.body.lat)],
+        openingTimes: openingTimes
+    }, function (err, location) {
+        if (err) {
+            sendJsResponse(res, 400, err);
+        } else {
+            sendJsResponse(res, 201, location);
+        }
+    });
 }
 
 module.exports.locationsReadOne = function (req, res, next) {
