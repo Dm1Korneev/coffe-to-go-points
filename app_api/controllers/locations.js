@@ -1,32 +1,80 @@
 var mongoose = require('mongoose');
-
 var Loc = mongoose.model('Location');
 
-var sendJsResponse = function(res, status, content){
+var sendJsResponse = function (res, status, content) {
     res.status(status);
     res.json(content);
 }
 
 module.exports.locationsListByDistance = function (req, res, next) {
-    sendJsResponse(res, 200, {"status" : "success"})
+    var lng = parseFloat(req.query.lng);
+    var lat = parseFloat(req.query.lat);
+
+    if (!lng || !lat) {
+        sendJsResponse(res, 404, { message: "lng and lat query parameters are required" });
+        return;
+    }
+    var point = {
+        type: "Point",
+        coordinates: [lng, lat]
+    };
+    var geoOptions = {
+        near: point,
+        spherical: true,
+        distanceField: "distance",
+        num: 10,
+        maxDistance: 2000
+    };
+
+    Loc.aggregate([{
+        $geoNear: geoOptions
+    }], function (err, result) {
+        if (err) {
+            sendJsResponse(res, 404, err);
+            return;
+        }
+
+        var locations = [];
+        result.forEach(function (doc) {
+            locations.push({
+                distance: doc.distance,
+                name: doc.name,
+                address: doc.address,
+                rating: doc.rating,
+                facilities: doc.facilities,
+                _id: doc._id
+            });
+        })
+        sendJsResponse(res, 200, locations);
+    })
 }
 
 module.exports.locationsCreate = function (req, res, next) {
-    sendJsResponse(res, 200, {"status" : "success"})
+    sendJsResponse(res, 200, { "status": "success" })
 }
 
 module.exports.locationsReadOne = function (req, res, next) {
-    Loc.
-        findById(req.params.locationId).
-        exec(function(err, location){
-            sendJsResponse(res, 200, location)    
-        })
+    if (req.params && req.params.locationId) {
+        Loc.
+            findById(req.params.locationId).
+            exec(function (err, location) {
+                if (location) {
+                    sendJsResponse(res, 200, location)
+                } else if (!location) {
+                    sendJsResponse(res, 404, { message: "locationId not found" })
+                } else if (err) {
+                    sendJsResponse(res, 404, err)
+                }
+            })
+    } else {
+        sendJsResponse(res, 404, { message: "No locationId in request" })
+    }
 }
 
 module.exports.locationsUpdateOne = function (req, res, next) {
-    sendJsResponse(res, 200, {"status" : "success"})
+    sendJsResponse(res, 200, { "status": "success" })
 }
 
 module.exports.locationsDeleteOne = function (req, res, next) {
-    sendJsResponse(res, 200, {"status" : "success"})
+    sendJsResponse(res, 200, { "status": "success" })
 }
