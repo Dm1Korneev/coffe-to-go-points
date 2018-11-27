@@ -1,9 +1,8 @@
-require('./locations');
 var mongoose = require('mongoose');
 
 var dbURI = 'mongodb://localhost/coffe-to-go-points';
 if (process.env.NODE_ENV === 'production') {
-    dbURI= process.env.MONGODB_URI;
+    dbURI = process.env.MONGODB_URI;
 }
 mongoose.connect(dbURI, { useNewUrlParser: true });
 
@@ -41,3 +40,5 @@ process.on('SIGTERM', function(){
         process.exit(0)
     });    
 });
+
+require('./locations');
