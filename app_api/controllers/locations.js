@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Loc = mongoose.model('Location');
 
-var sendJsResponse = function (res, status, content) {
+function sendJsResponse(res, status, content) {
     res.status(status);
     res.json(content);
 }
@@ -68,8 +68,9 @@ module.exports.locationsCreate = function (req, res, next) {
         name: req.body.name,
         address: req.body.address,
         facilities: facilities,
-        coords: [parseFloat(req.body.lng),
-                parseFloat(req.body.lat)],
+        coords:
+            [parseFloat(req.body.lng),
+            parseFloat(req.body.lat)],
         openingTimes: openingTimes
     }, function (err, location) {
         if (err) {
@@ -99,7 +100,45 @@ module.exports.locationsReadOne = function (req, res, next) {
 }
 
 module.exports.locationsUpdateOne = function (req, res, next) {
-    sendJsResponse(res, 200, { "status": "success" })
+    if(!req.params.locationId){
+        sendJsResponse(res, 404, { message: "No locationId in request" });
+        return;
+    }
+
+    var facilities, openingTimes;
+
+    if (req.body.facilities) {
+        facilities = req.body.facilities.split(",");
+    }
+    if (req.body.days1) {
+        openingTimes = [{
+            days: req.body.days1,
+            opening: req.body.opening1,
+            closing: req.body.closing1,
+            closed: req.body.closed1,
+        }];
+    }
+
+    Loc.updateOne(
+        {
+            _id: req.body.locationId
+        }, {
+            $set: {
+                name: req.body.name,
+                address: req.body.address,
+                facilities: facilities,
+                coords:
+                    [parseFloat(req.body.lng),
+                    parseFloat(req.body.lat)],
+                openingTimes: openingTimes
+            }
+        }, function (err, location) {
+            if (err) {
+                sendJsResponse(res, 400, err);
+            } else {
+                sendJsResponse(res, 201, location);
+            }
+        });
 }
 
 module.exports.locationsDeleteOne = function (req, res, next) {

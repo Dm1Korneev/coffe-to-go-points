@@ -13,7 +13,7 @@ router.delete('/locations/:locationId', ctrlLocations.locationsDeleteOne);
 // reviews
 router.post('/locations/:locationId/reviews', ctrlReviews.reviewsCreate);
 router.get('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsReadOne);
-router.put('/locations/:locationId/reviews', ctrlReviews.reviewsUpdateOne);
-router.delete('/locations/:locationId/reviews', ctrlReviews.reviewsDeleteOne);
+router.put('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsUpdateOne);
+router.delete('/locations/:locationId/reviews/:reviewId', ctrlReviews.reviewsDeleteOne);
 
 module.exports = router;
