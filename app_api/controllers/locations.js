@@ -9,10 +9,11 @@ function sendJsResponse(res, status, content) {
 module.exports.locationsListByDistance = function(req, res, next) {
   var lng = parseFloat(req.query.lng);
   var lat = parseFloat(req.query.lat);
+  var maxDistance = parseFloat(req.query.maxDistance);
 
-  if (!lng || !lat) {
+  if (!lng || !lat || !maxDistance) {
     sendJsResponse(res, 404, {
-      message: "lng and lat query parameters are required"
+      message: "lng, lat and maxDistance query parameters are required"
     });
     return;
   }
@@ -25,7 +26,7 @@ module.exports.locationsListByDistance = function(req, res, next) {
     spherical: true,
     distanceField: "distance",
     num: 10,
-    maxDistance: 2000
+    maxDistance: maxDistance
   };
 
   LocationModel.aggregate(
