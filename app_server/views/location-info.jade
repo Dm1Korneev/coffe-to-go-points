@@ -20,8 +20,13 @@ block content
           .card.bg-light
             h4.card-header Opening hours
             .card-body
-              each openingHour in location.openingHours
-                p= openingHour
+              each openingTime in location.openingTimes
+                p
+                  |#{openingTime.days} :
+                  if openingTime.closed
+                    | closed
+                  else
+                    |&nbsp;#{openingTime.opening} - #{openingTime.closing}
           .card.bg-light
             h4.card-header Facilities
             .card-body
@@ -48,9 +53,10 @@ block content
                       span.rating
                         +outputRating(review.rating)
                       span.reviewAuthor= review.author
-                      small.reviewTimestamp= review.reviewTimestamp
+                      small.reviewTimestamp
+                        +formatDate(review.createdOn)
                     .col-xs-12
-                      p= review.text
+                      p= review.reviewtext
     .col-xs-12.col-md-3
       p.lead= sidebar.first
       p= sidebar.second

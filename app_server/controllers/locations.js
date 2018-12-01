@@ -17,6 +17,25 @@ function formatDistance(distance) {
   return distance;
 }
 
+function showError(req, res, status) {
+  var title, text;
+  if (status === 404) {
+    title = "404, page not found";
+    text = "Oh dear. Looks like we can't find this page. Sorry.";
+  } else if (status === 500) {
+    title = "500, internal server error";
+    text = "How embarrassing. There's a problem with our server.";
+  } else {
+    title = status + ", something's gone wrong";
+    text = "Something, somewhere, has gone just a little bit wrong.";
+  }
+  res.status(status);
+  res.render("generic-text", {
+    title: title,
+    text: text
+  });
+}
+
 function renderHomepage(req, res, responseBody) {
   var message;
   if (!(responseBody instanceof Array)) {
@@ -36,6 +55,19 @@ function renderHomepage(req, res, responseBody) {
     sidebar:
       "Looking for coffe to Go? We helps you to find some one. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem beatae magni ducimus temporibus quis, illo deserunt nisi nesciunt impedit reprehenderit fugiat vel sed repellendus tenetur accusamus voluptate, totam corrupti esse distinctio ab rerum quod doloremque officiis. Ullam dolorum alias animi odio nisi amet distinctio, ipsa eveniet beatae quaerat corporis ex.",
     message: message
+  });
+}
+
+function renderLocationInfo(req, res, responseBody) {
+  res.render("location-info", {
+    title: responseBody.name,
+    location: responseBody,
+    sidebar: {
+      first:
+        "Starcups is on Coffe To Go because it has accessible wifi and space to sit down with your laptop and get some work done.",
+      second:
+        "If you've been and you like it - or if you don't - please leave a review to help other people just like you."
+    }
   });
 }
 
@@ -62,46 +94,17 @@ module.exports.homeList = function(req, res, next) {
 };
 
 module.exports.locationInfo = function(req, res, next) {
-  res.render("location-info", {
-    title: "Location Info",
-    location: {
-      name: "Location 1",
-      address: "121 ight Street, Reading, RG6 1PS",
-      rating: 3,
-      facilities: ["Hot drinks", "Food", "Wi Fi"],
-      distance: "100m",
-      openingHours: [
-        "Monday - Friday : 7:00am - 7:00pm",
-        "Saturday : 8:00am - 5:00pm",
-        "Sunday : closed"
-      ],
-      reviews: [
-        {
-          author: "Simon Holmes",
-          reviewTimestamp: "16 July 2013",
-          rating: 5,
-          text: "What a great place. I can't say enough good things about it."
-        },
-        {
-          author: "Charlie Chaplin",
-          reviewTimestamp: "16 June 2013",
-          rating: 4,
-          text: "It was okay. Coffee wasn't great, but the wifi was fast."
-        },
-        {
-          author: "Simon Holmes",
-          reviewTimestamp: "19 July 2013",
-          rating: 3,
-          text: "What a great place. I can't say enough good things about it."
-        }
-      ],
-      coords: [55.725, 37.573]
-    },
-    sidebar: {
-      first:
-        "Starcups is on Coffe To Go because it has accessible wifi and space to sit down with your laptop and get some work done.",
-      second:
-        "If you've been and you like it - or if you don't - please leave a review to help other people just like you."
+  var requestOptions = {
+    url: apiOptions.server + "/api/locations/" + req.params.locationId,
+    method: "GET",
+    json: {}
+  };
+
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderLocationInfo(req, res, body);
+    } else {
+      showError(req, res, response.statusCode);
     }
   });
 };
