@@ -11,7 +11,7 @@ module.exports.locationsListByDistance = function(req, res, next) {
   var lat = parseFloat(req.query.lat);
   var maxDistance = parseFloat(req.query.maxDistance);
 
-  if (!lng || !lat || !maxDistance) {
+  if ((!lng && lng !== 0) || (!lat && lat !== 0) || !maxDistance) {
     sendJsResponse(res, 404, {
       message: "lng, lat and maxDistance query parameters are required"
     });
