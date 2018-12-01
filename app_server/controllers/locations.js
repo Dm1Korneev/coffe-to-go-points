@@ -5,7 +5,7 @@ var apiOptions = {
   server: "http://localhost:3000"
 };
 if (process.env.NODE_ENV === "production") {
-  apiOptions.server = "https://coffe-to-go-points.herokuapp.com/";
+  apiOptions.server = "https://coffe-to-go-points.herokuapp.com";
 }
 
 function formatDistance(distance) {
