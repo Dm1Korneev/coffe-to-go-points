@@ -170,5 +170,41 @@ module.exports.reviewsUpdateOne = function(req, res, next) {
 };
 
 module.exports.reviewsDeleteOne = function(req, res, next) {
-  sendJsResponse(res, 200, { status: "success" });
+  if (!req.params.locationId || !req.params.reviewId) {
+    sendJsResponse(res, 400, {
+      message: "No locationId or reviewId in request"
+    });
+    return;
+  }
+
+  LocationModel.findById(req.params.locationId)
+    .select("reviews")
+    .exec(function(err, location) {
+      if (err) {
+        sendJsResponse(res, 400, err);
+        return;
+      } else if (!location) {
+        sendJsResponse(res, 404, { message: "locationId not found" });
+        return;
+      } else if (!location.reviews || location.reviews.length == 0) {
+        sendJsResponse(res, 404, { message: "no review to delete" });
+        return;
+      }
+
+      var thisReview = location.reviews.id(req.params.reviewId);
+      if (!thisReview) {
+        sendJsResponse(res, 404, { message: "reviewid not found" });
+      }
+
+      thisReview.remove();
+
+      location.save(function(err, location) {
+        if (!err) {
+          updateAverageRating(location._id);
+          sendJsResponse(res, 201, thisReview);
+        } else {
+          sendJsResponse(res, 400, err);
+        }
+      });
+    });
 };

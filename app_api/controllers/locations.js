@@ -156,5 +156,19 @@ module.exports.locationsUpdateOne = function(req, res, next) {
 };
 
 module.exports.locationsDeleteOne = function(req, res, next) {
-  sendJsResponse(res, 200, { status: "success" });
+  if (!req.params.locationId) {
+    sendJsResponse(res, 404, { message: "No locationId in request" });
+    return;
+  }
+
+  LocationModel.findByIdAndRemove(req.params.locationId).exec(function(
+    err,
+    location
+  ) {
+    if (err) {
+      sendJsResponse(res, 400, err);
+      return;
+    }
+    sendJsResponse(res, 204, null);
+  });
 };
