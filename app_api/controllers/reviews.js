@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Loc = mongoose.model("Location");
+var LocationModel = mongoose.model("Location");
 
 function sendJsResponse(res, status, content) {
   res.status(status);
@@ -7,7 +7,7 @@ function sendJsResponse(res, status, content) {
 }
 
 function updateAverageRating(locationId) {
-  Loc.aggregate(
+  LocationModel.aggregate(
     [
       {
         $match: { _id: locationId }
@@ -34,7 +34,7 @@ function updateAverageRating(locationId) {
 }
 
 function doSetAverageRating(locationId, AvgRating) {
-  Loc.updateOne(
+  LocationModel.updateOne(
     { _id: locationId },
     {
       $set: { rating: AvgRating }
@@ -77,7 +77,7 @@ function doAddReview(req, res, location) {
 
 module.exports.reviewsCreate = function(req, res, next) {
   if (req.params.locationId) {
-    Loc.findById(req.params.locationId)
+    LocationModel.findById(req.params.locationId)
       .select("reviews")
       .exec(function(err, location) {
         if (!err) {
@@ -93,7 +93,7 @@ module.exports.reviewsCreate = function(req, res, next) {
 
 module.exports.reviewsReadOne = function(req, res, next) {
   if (req.params && req.params.locationId && req.params.reviewId) {
-    Loc.findById(req.params.locationId)
+    LocationModel.findById(req.params.locationId)
       .select("name reviews")
       .exec(function(err, location) {
         if (location) {
@@ -135,31 +135,38 @@ module.exports.reviewsUpdateOne = function(req, res, next) {
     return;
   }
 
-  Loc.findOneAndUpdate(
-    {
-      _id: req.params.locationId,
-      "reviews._id": req.params.reviewId
-    },
-    {
-      $set: {
-        "reviews.$.author": req.body.author,
-        "reviews.$.rating": parseInt(req.body.rating),
-        "reviews.$.reviewtext": req.body.reviewtext
-      }
-    },
-    { new: true },
-    function(err, location) {
-      if (!err && location) {
-        updateAverageRating(location._id);
-        var thisReview = location.reviews.id(req.params.reviewId);
-        sendJsResponse(res, 201, thisReview);
-      } else if (!location) {
-        sendJsResponse(res, 400, { message: "review not found by id" });
-      } else {
+  LocationModel.findById(req.params.locationId)
+    .select("reviews")
+    .exec(function(err, location) {
+      if (err) {
         sendJsResponse(res, 400, err);
+        return;
+      } else if (!location) {
+        sendJsResponse(res, 404, { message: "locationId not found" });
+        return;
+      } else if (!location.reviews || location.reviews.length == 0) {
+        sendJsResponse(res, 404, { message: "no review to update" });
+        return;
       }
-    }
-  );
+
+      var thisReview = location.reviews.id(req.params.reviewId);
+      if (!thisReview) {
+        sendJsResponse(res, 404, { message: "reviewid not found" });
+      }
+
+      thisReview.author = req.body.author;
+      thisReview.rating = parseInt(req.body.rating);
+      thisReview.reviewtext = req.body.reviewtext;
+
+      location.save(function(err, location) {
+        if (!err) {
+          updateAverageRating(location._id);
+          sendJsResponse(res, 201, thisReview);
+        } else {
+          sendJsResponse(res, 400, err);
+        }
+      });
+    });
 };
 
 module.exports.reviewsDeleteOne = function(req, res, next) {

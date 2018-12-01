@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-var Loc = mongoose.model("Location");
+var LocationModel = mongoose.model("Location");
 
 function sendJsResponse(res, status, content) {
   res.status(status);
@@ -28,7 +28,7 @@ module.exports.locationsListByDistance = function(req, res, next) {
     maxDistance: 2000
   };
 
-  Loc.aggregate(
+  LocationModel.aggregate(
     [
       {
         $geoNear: geoOptions
@@ -73,7 +73,7 @@ module.exports.locationsCreate = function(req, res, next) {
     ];
   }
 
-  Loc.create(
+  LocationModel.create(
     {
       name: req.body.name,
       address: req.body.address,
@@ -93,7 +93,7 @@ module.exports.locationsCreate = function(req, res, next) {
 
 module.exports.locationsReadOne = function(req, res, next) {
   if (req.params && req.params.locationId) {
-    Loc.findById(req.params.locationId).exec(function(err, location) {
+    LocationModel.findById(req.params.locationId).exec(function(err, location) {
       if (location) {
         sendJsResponse(res, 200, location);
       } else if (!location) {
@@ -113,43 +113,46 @@ module.exports.locationsUpdateOne = function(req, res, next) {
     return;
   }
 
-  var facilities, openingTimes;
-
-  if (req.body.facilities) {
-    facilities = req.body.facilities.split(",");
-  }
-  if (req.body.days1) {
-    openingTimes = [
-      {
-        days: req.body.days1,
-        opening: req.body.opening1,
-        closing: req.body.closing1,
-        closed: req.body.closed1
-      }
-    ];
-  }
-
-  Loc.updateOne(
-    {
-      _id: req.body.locationId
-    },
-    {
-      $set: {
-        name: req.body.name,
-        address: req.body.address,
-        facilities: facilities,
-        coords: [parseFloat(req.body.lng), parseFloat(req.body.lat)],
-        openingTimes: openingTimes
-      }
-    },
-    function(err, location) {
+  LocationModel.findById(req.params.locationId)
+    .select("-reviews -rating")
+    .exec(function(err, location) {
       if (err) {
         sendJsResponse(res, 400, err);
-      } else {
-        sendJsResponse(res, 201, location);
+        return;
+      } else if (!location) {
+        sendJsResponse(res, 404, { message: "locationId not found" });
+        return;
       }
-    }
-  );
+
+      var facilities, openingTimes;
+      if (req.body.facilities) {
+        facilities = req.body.facilities.split(",");
+      }
+      if (req.body.days1) {
+        openingTimes = [
+          {
+            days: req.body.days1,
+            opening: req.body.opening1,
+            closing: req.body.closing1,
+            closed: req.body.closed1
+          }
+        ];
+      }
+
+      location.name = req.body.name;
+      location.address = req.body.address;
+      location.facilities = facilities;
+      location.coords = [parseFloat(req.body.lng), parseFloat(req.body.lat)];
+      location.openingTimes = openingTimes;
+
+      location.save(function(err, location) {
+        if (!err) {
+          sendJsResponse(res, 201, location);
+        } else {
+          sendJsResponse(res, 400, err);
+        }
+      });
+    });
 };
 
 module.exports.locationsDeleteOne = function(req, res, next) {
