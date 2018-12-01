@@ -201,7 +201,7 @@ module.exports.reviewsDeleteOne = function(req, res, next) {
       location.save(function(err, location) {
         if (!err) {
           updateAverageRating(location._id);
-          sendJsResponse(res, 201, thisReview);
+          sendJsResponse(res, 201, null);
         } else {
           sendJsResponse(res, 400, err);
         }
