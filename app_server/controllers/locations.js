@@ -135,7 +135,7 @@ module.exports.addReview = function(req, res, next) {
 
 module.exports.doAddReview = function(req, res, next) {
   // validation
-  if (!req.body.author || !!req.body.rating || !!req.body.reviewtext) {
+  if (!req.body.author || !req.body.rating || !req.body.reviewtext) {
     res.redirect(
       "/location/" + req.params.locationId + "/review/new" + "?err=val"
     );
