@@ -6,11 +6,13 @@ block content
       h1 Review #{LocationName}
   .row
     .col-xs-12.col-md-8
-      form(action="/location", method="get", role="form")
+      form#addReview(action="", method="post", role="form")
+        -if (error == "val")
+          .alert.alert-danger(role="alert") All fields required, please try again
         .form-group.row
-          label.col-xs-10.col-sm-2.col-form-label(for="name") Name
+          label.col-xs-10.col-sm-2.col-form-label(for="author") Name
           .col-xs-12.col-sm-10
-            input#name.form-control(name="name")
+            input#name.form-control(name="author")
         .form-group.row
           label.col-xs-10.col-sm-2.col-form-label(for="rating") Rating
           .col-xs-12.col-sm-2
@@ -21,8 +23,8 @@ block content
               option 2
               option 1
         .form-group.row 
-          label.col-sm-2.col-form-label(for="review") Review
+          label.col-sm-2.col-form-label(for="reviewtext") Review
           .col-sm-10
-            textarea#review.form-control(bame="review", rows="5")
-        button.btn.btn-info.float-right Add my review
+            textarea#review.form-control(name="reviewtext", rows="5")
+        input.btn.btn-info.float-right(type= "submit" value="Add my review")
     .col-xs-12.col-md-4

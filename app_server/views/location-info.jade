@@ -40,7 +40,7 @@ block content
         .col-xs-12.col-sm-12.review-panel
           .card.bg-light
             h4.card-header Customer reviews
-              a.btn.btn-info.float-right(href='/location/review/new') Add review
+              a.btn.btn-info.float-right(href='/location/#{location._id}/review/new') Add review
             .card-body.review-container
               each review in location.reviews
                 .row

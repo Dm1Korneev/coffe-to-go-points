@@ -71,6 +71,14 @@ function renderLocationInfo(req, res, responseBody) {
   });
 }
 
+function renderReviewForm(req, res, responseBody) {
+  res.render("location-review-form", {
+    title: "Review " + responseBody.name,
+    LocationName: responseBody.name,
+    error: req.query.err
+  });
+}
+
 module.exports.homeList = function(req, res, next) {
   var requestOptions = {
     url: apiOptions.server + "/api/locations",
@@ -110,8 +118,53 @@ module.exports.locationInfo = function(req, res, next) {
 };
 
 module.exports.addReview = function(req, res, next) {
-  res.render("location-review-form", {
-    title: "Add Review",
-    LocationName: "Location 1"
+  var requestOptions = {
+    url: apiOptions.server + "/api/locations/" + req.params.locationId,
+    method: "GET",
+    json: {}
+  };
+
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 200) {
+      renderReviewForm(req, res, body);
+    } else {
+      showError(req, res, response.statusCode);
+    }
+  });
+};
+
+module.exports.doAddReview = function(req, res, next) {
+  // validation
+  if (!req.body.author || !!req.body.rating || !!req.body.reviewtext) {
+    res.redirect(
+      "/location/" + req.params.locationId + "/review/new" + "?err=val"
+    );
+    return;
+  }
+
+  var requestOptions = {
+    url:
+      apiOptions.server +
+      "/api/locations/" +
+      req.params.locationId +
+      "/reviews",
+    method: "POST",
+    json: req.body
+  };
+
+  request(requestOptions, function(err, response, body) {
+    if (response.statusCode === 201) {
+      res.redirect("/location/" + req.params.locationId);
+    } else if (
+      response.statusCode === 400 &&
+      body.name &&
+      body.name === "ValidationError"
+    ) {
+      res.redirect(
+        "/location/" + req.params.locationId + "/review/new" + "?err=val"
+      );
+    } else {
+      showError(req, res, response.statusCode);
+    }
   });
 };
