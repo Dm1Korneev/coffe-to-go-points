@@ -20,31 +20,26 @@ function ratingStars() {
   };
 }
 
-function locationListCtrl($scope) {
-  $scope.data = {
-    locations: [
-      {
-        name: "Location 1",
-        address: "Pushkinskaya 1",
-        rating: 4,
-        facilities: ["fac 1", "fac 2"],
-        distance: 100,
-        _id: "sfsfsdfg"
-      },
-      {
-        name: "Location 2",
-        address: "Pushkinskaya 2",
-        rating: 3,
-        facilities: ["fac 3", "fac 4"],
-        distance: 800,
-        _id: "hjhjhjhj"
-      }
-    ]
-  };
+function locationListCtrl($scope, coffeToGoData) {
+  coffeToGoData.then(
+    function(result) {
+      $scope.data = {
+        locations: result.data
+      };
+    },
+    function(err) {
+      console.log(err);
+    }
+  );
+}
+
+function coffeToGoData($http) {
+  return $http.get("/api/locations?lng=55.725&lat=37.573&maxDistance=2000");
 }
 
 angular
   .module("coffeToGoApp")
   .controller("locationListCtrl", locationListCtrl)
   .filter("formatDistance", formatDistance)
-  .directive("ratingStars", ratingStars);
+  .directive("ratingStars", ratingStars)
+  .service("coffeToGoData", coffeToGoData);

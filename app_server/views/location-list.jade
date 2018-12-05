@@ -9,9 +9,11 @@ block content
         small &nbsp;#{pageHeader.strapline}
   .row
     .col-xs-12.col-sm-8(ng-controller="locationListCtrl")
+      label(for="filter") Filter
+      input#filter(type="text", name="filter", ng-model="textFilter")
       .error {{message}}
       ul.list-group
-        li.list-group-item(ng-repeat="location in data.locations")
+        li.list-group-item(ng-repeat="location in data.locations | filter: textFilter")
           h4
             a(href="/location/{{location._id}}"){{location.name}}
             &nbsp;
