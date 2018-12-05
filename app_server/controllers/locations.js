@@ -8,15 +8,6 @@ if (process.env.NODE_ENV === "production") {
   apiOptions.server = "https://coffe-to-go-points.herokuapp.com";
 }
 
-function formatDistance(distance) {
-  if (distance > 1000) {
-    distance = "" + (distance / 1000).toFixed(1) + " km";
-  } else {
-    distance = "" + distance.toFixed(0) + " m";
-  }
-  return distance;
-}
-
 function showError(req, res, status) {
   var title, text;
   if (status === 404) {
@@ -36,25 +27,15 @@ function showError(req, res, status) {
   });
 }
 
-function renderHomepage(req, res, responseBody) {
-  var message;
-  if (!(responseBody instanceof Array)) {
-    message = "API lookup error";
-    responseBody = [];
-  } else if (!responseBody.length) {
-    message = "No places fount nearby";
-  }
-
+function renderHomepage(req, res) {
   res.render("location-list", {
     title: "CoffeToGo - find place whith coffe to go",
     pageHeader: {
       title: "Coffe to Go",
       strapline: "Point whith cofee near you!"
     },
-    locations: responseBody,
     sidebar:
-      "Looking for coffe to Go? We helps you to find some one. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem beatae magni ducimus temporibus quis, illo deserunt nisi nesciunt impedit reprehenderit fugiat vel sed repellendus tenetur accusamus voluptate, totam corrupti esse distinctio ab rerum quod doloremque officiis. Ullam dolorum alias animi odio nisi amet distinctio, ipsa eveniet beatae quaerat corporis ex.",
-    message: message
+      "Looking for coffe to Go? We helps you to find some one. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem beatae magni ducimus temporibus quis, illo deserunt nisi nesciunt impedit reprehenderit fugiat vel sed repellendus tenetur accusamus voluptate, totam corrupti esse distinctio ab rerum quod doloremque officiis. Ullam dolorum alias animi odio nisi amet distinctio, ipsa eveniet beatae quaerat corporis ex."
   });
 }
 
@@ -80,25 +61,7 @@ function renderReviewForm(req, res, responseBody) {
 }
 
 module.exports.homeList = function(req, res, next) {
-  var requestOptions = {
-    url: apiOptions.server + "/api/locations",
-    method: "GET",
-    json: {},
-    qs: {
-      lng: 55.725,
-      lat: 37.573,
-      maxDistance: 2000
-    }
-  };
-
-  request(requestOptions, function(err, response, body) {
-    if (response.statusCode === 200 && body.length) {
-      body.forEach(element => {
-        element.distance = formatDistance(element.distance);
-      });
-    }
-    renderHomepage(req, res, body);
-  });
+  renderHomepage(req, res);
 };
 
 module.exports.locationInfo = function(req, res, next) {

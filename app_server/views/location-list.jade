@@ -8,19 +8,18 @@ block content
       h2= pageHeader.title
         small &nbsp;#{pageHeader.strapline}
   .row
-    .col-xs-12.col-sm-8
-      .error= message
+    .col-xs-12.col-sm-8(ng-controller="locationListCtrl")
+      .error {{message}}
       ul.list-group
-        each location in locations
-          li.list-group-item
-            h4
-              a(href="/location/#{location._id}")= location.name
-              small &nbsp;
-              +outputRating(location.rating)
-              span.badge.badge.badge-warning.float-right= location.distance
-            p.adress= location.address
-            each facility in location.facilities
-              span.badge.badge-info= facility
-              | &nbsp;    
+        li.list-group-item(ng-repeat="location in data.locations")
+          h4
+            a(href="/location/{{location._id}}"){{location.name}}
+            &nbsp;
+            small(rating-stars, rating="location.rating")
+            span.badge.badge.badge-warning.float-right{{location.distance | formatDistance}}
+          p.adress{{location.address}}
+          span(ng-repeat="facility in location.facilities")
+            span.badge.badge-info{{facility}}
+            &nbsp;   
     .col-xs-12.col-sm-4
       p= sidebar     
