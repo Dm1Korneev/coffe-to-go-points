@@ -21,14 +21,16 @@ function ratingStars() {
 }
 
 function locationListCtrl($scope, coffeToGoData) {
+  $scope.message = "Searching for place near You";
   coffeToGoData.then(
     function(result) {
+      $scope.message = result.data.length > 0 ? "" : "No locations found";
       $scope.data = {
         locations: result.data
       };
     },
     function(err) {
-      console.log(err);
+      $scope.message = "Sorry something's gone wrong";
     }
   );
 }
