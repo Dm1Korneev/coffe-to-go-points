@@ -60,7 +60,7 @@ block content
       var map;
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: #{location.coords[0]}, lng: #{location.coords[1]}},
+          center: {lat: #{location.coords[1]}, lng: #{location.coords[0]}},
           zoom: 13
         });
       }      

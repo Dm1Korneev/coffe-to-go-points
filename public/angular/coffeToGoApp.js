@@ -20,23 +20,60 @@ function ratingStars() {
   };
 }
 
-function locationListCtrl($scope, coffeToGoData) {
-  $scope.message = "Searching for place near You";
-  coffeToGoData.then(
-    function(result) {
-      $scope.message = result.data.length > 0 ? "" : "No locations found";
-      $scope.data = {
-        locations: result.data
-      };
-    },
-    function(err) {
-      $scope.message = "Sorry something's gone wrong";
-    }
-  );
+function locationListCtrl($scope, coffeToGoData, geolocation) {
+  $scope.message = "Checking your location";
+
+  $scope.getData = function(position) {
+    $scope.message = "Serching for nearby places";
+
+    coffeToGoData
+      .locationsByCoords(position.coords.longitude, position.coords.latitude)
+      .then(
+        function(result) {
+          $scope.message = result.data.length ? "" : "No locations found";
+          $scope.data = {
+            locations: result.data
+          };
+        },
+        function(err) {
+          $scope.message = "Sorry something's gone wrong";
+        }
+      );
+  };
+
+  $scope.showError = function(error) {
+    $scope.aaply(function() {
+      $scope.message = error.message;
+    });
+  };
+
+  $scope.noGeo = function() {
+    $scope.aaply(function() {
+      $scope.message = "Geolocation not supported by this browser";
+    });
+  };
+
+  geolocation.getPosition($scope.getData, $scope.showError, $scope.noGeo);
 }
 
 function coffeToGoData($http) {
-  return $http.get("/api/locations?lng=55.725&lat=37.573&maxDistance=2000");
+  locationsByCoords = function(lng, lat) {
+    return $http.get(
+      "/api/locations?lng=" + lng + "&lat=" + lat + "&maxDistance=20000"
+    );
+  };
+  return { locationsByCoords: locationsByCoords };
+}
+
+function geolocation() {
+  getPosition = function(cbSuccess, cbError, cbNoGeo) {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(cbSuccess, cbError);
+    } else {
+      cbNoGeo();
+    }
+  };
+  return { getPosition: getPosition };
 }
 
 angular
@@ -44,4 +81,5 @@ angular
   .controller("locationListCtrl", locationListCtrl)
   .filter("formatDistance", formatDistance)
   .directive("ratingStars", ratingStars)
-  .service("coffeToGoData", coffeToGoData);
+  .service("coffeToGoData", coffeToGoData)
+  .service("geolocation", geolocation);
