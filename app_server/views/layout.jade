@@ -6,12 +6,7 @@ html(ng-app='coffeToGoApp')
     link(rel='stylesheet', href='/stylesheets/style.css')
     link(rel='stylesheet', href='/bootstrap/css/bootstrap.min.css')
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
-        crossorigin="anonymous")
-    script(src='/angular/angular.min.js')
-    script(src='/angular/coffeToGoApp.js')
-    script(src='/javascripts/jquery-3.3.1.slim.min.js')
-    script(src='/javascripts/popper.min.js')
-    script(src='/bootstrap/js/bootstrap.min.js')    
+        crossorigin="anonymous")    
   body
     .navbar.navbar-light.bg-light.navbar-expand-lg.fixed-top
       .container
@@ -27,8 +22,9 @@ html(ng-app='coffeToGoApp')
     footer.fixed-bottom.bg-light.text-center
       div
         small &copy; Dmitriy Korneev 2018
-    //script(src='/angular/angular.min.js')
-    //script(src='/angular/coffeToGoApp.js')
-    //script(src='/javascripts/jquery-3.3.1.slim.min.js')
-    //script(src='/javascripts/popper.min.js')
-    //script(src='/bootstrap/js/bootstrap.min.js')
+    script(src='/angular/angular.min.js')
+    script(src='/lib/angular-route.min.js')
+    script(src='/app.js')
+    script(src='/javascripts/jquery-3.3.1.slim.min.js')
+    script(src='/javascripts/popper.min.js')
+    script(src='/bootstrap/js/bootstrap.min.js')
