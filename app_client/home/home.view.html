@@ -11,7 +11,10 @@
     <input id="filter" type="text" , name="filter" , ng-model="textFilter" />
     <div class="error">{{ vm.message }}</div>
     <ul class="list-group">
-      <li class="list-group-item" ng-repeat="location in vm.data.locations">
+      <li
+        class="list-group-item"
+        ng-repeat="location in vm.data.locations | filter: textFilter"
+      >
         <h4>
           <a href="/location/{{ location._id }}">{{ location.name }}</a>
           <small rating-stars rating="location.rating"></small>
