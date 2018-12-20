@@ -18,13 +18,19 @@ html(ng-app='coffeToGoApp')
             li.nav-item
               a.nav-link(href='/about/') About
     .container.mt-5.pt-2
-      block content
+      div(ng-view)
+        block content
     footer.fixed-bottom.bg-light.text-center
       div
         small &copy; Dmitriy Korneev 2018
     script(src='/angular/angular.min.js')
     script(src='/lib/angular-route.min.js')
     script(src='/app.js')
+    script(src='/home/home.controller.js')
+    script(src='/common/services/coffeToGoData.service.js')
+    script(src='/common/services/geolocation.service.js')
+    script(src='/common/directives/ratingStars/ratingStars.directive.js')
+    script(src='/common/filters/formatDistance.filter.js')
     script(src='/javascripts/jquery-3.3.1.slim.min.js')
     script(src='/javascripts/popper.min.js')
     script(src='/bootstrap/js/bootstrap.min.js')
