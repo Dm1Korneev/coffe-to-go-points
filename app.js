@@ -26,7 +26,32 @@ var appClientsFiles = [
   "app_client/common/filters/formatDistance.filter.js",
   "app_client/common/directives/ratingStars/ratingStars.directive.js"
 ];
-var uglified = uglifyJs.minify(appClientsFiles, { compress: false });
+var uglified = uglifyJs.minify(
+  {
+    "app.js": fs.readFileSync("app_client/app.js", "utf8"),
+    "home.controller.js": fs.readFileSync(
+      "app_client/home/home.controller.js",
+      "utf8"
+    ),
+    "coffeToGoData.service.js": fs.readFileSync(
+      "app_client/common/services/coffeToGoData.service.js",
+      "utf8"
+    ),
+    "geolocation.service.js": fs.readFileSync(
+      "app_client/common/services/geolocation.service.js",
+      "utf8"
+    ),
+    "formatDistance.filter.js": fs.readFileSync(
+      "app_client/common/filters/formatDistance.filter.js",
+      "utf8"
+    ),
+    "ratingStars.directive.js": fs.readFileSync(
+      "app_client/common/directives/ratingStars/ratingStars.directive.js",
+      "utf8"
+    )
+  },
+  { compress: false }
+);
 fs.writeFile("public/angular/CoffeToGo.min.js", uglified.code, function(error) {
   if (error) {
     comsole.log(error);
