@@ -8,8 +8,12 @@
       title: "Coffe to Go",
       strapline: "Point whith cofee near you!"
     };
-    vm.sidebar =
-      "Looking for coffe to Go? We helps you to find some one. Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem beatae magni ducimus temporibus quis, illo deserunt nisi nesciunt impedit reprehenderit fugiat vel sed repellendus tenetur accusamus voluptate, totam corrupti esse distinctio ab rerum quod doloremque officiis. Ullam dolorum alias animi odio nisi amet distinctio, ipsa eveniet beatae quaerat corporis ex.";
+    vm.sidebar = {
+      first:
+        "Starcups is on Coffe To Go because it has accessible wifi and space to sit down with your laptop and get some work done.",
+      second:
+        "If you've been and you like it - or if you don't - please leave a review to help other people just like you."
+    };
 
     vm.message = "Checking your location";
 

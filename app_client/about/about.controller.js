@@ -1,8 +1,7 @@
 (function() {
   angular.module("coffeToGoApp").controller("aboutCtrl", aboutCtrl);
 
-  aboutCtrl.$inject = ["$scope"];
-  function aboutCtrl($scope) {
+  function aboutCtrl() {
     var vm = this;
     vm.title = "About";
     vm.text =

@@ -55,6 +55,10 @@ var uglified = uglifyJs.minify(
     "about.controller.js": fs.readFileSync(
       "app_client/about/about.controller.js",
       "utf8"
+    ),
+    "details.controller.js": fs.readFileSync(
+      "app_client/details/details.controller.js",
+      "utf8"
     )
   },
   { compress: false }

@@ -13,14 +13,16 @@
         controller: "aboutCtrl",
         controllerAs: "vm"
       })
+      .when("/location/:locationId", {
+        templateUrl: "details/details.view.html",
+        controller: "detailsCtrl",
+        controllerAs: "vm"
+      })
       .otherwise({
         redirectTo: "/"
       });
 
-    $locationProvider.html5Mode({
-      enabled: true,
-      requireBase: false
-    });
+    $locationProvider.html5Mode(true);
   }
 
   angular
