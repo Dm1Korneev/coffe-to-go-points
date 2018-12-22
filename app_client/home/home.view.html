@@ -1,35 +1,33 @@
-<div class="row">
-  <div class="col-lg-6">
-    <h2>
-      {{ vm.pageHeader.title }} <small>{{ vm.pageHeader.strapline }} </small>
-    </h2>
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-12 col-sm-8">
-    <label for="filter">Filter</label>
-    <input id="filter" type="text" , name="filter" , ng-model="textFilter" />
-    <div class="error">{{ vm.message }}</div>
-    <ul class="list-group">
-      <li
-        class="list-group-item"
-        ng-repeat="location in vm.data.locations | filter: textFilter"
-      >
-        <h4>
-          <a href="/location/{{ location._id }}">{{ location.name }}</a>
-          <small rating-stars rating="location.rating"></small>
-          <span class="badge badge-warning float-right">
-            {{ location.distance | formatDistance }}
+<navigation> </navigation>
+<div class="container mt-5 pt-2">
+  <page-header content="vm.pageHeader"></page-header>
+  <div class="row">
+    <div class="col-xs-12 col-sm-8">
+      <label for="filter">Filter</label>
+      <input id="filter" type="text" , name="filter" , ng-model="textFilter" />
+      <div class="error">{{ vm.message }}</div>
+      <ul class="list-group">
+        <li
+          class="list-group-item"
+          ng-repeat="location in vm.data.locations | filter: textFilter"
+        >
+          <h4>
+            <a href="/location/{{ location._id }}">{{ location.name }}</a>
+            <small rating-stars rating="location.rating"></small>
+            <span class="badge badge-warning float-right">
+              {{ location.distance | formatDistance }}
+            </span>
+          </h4>
+          <p class="adress">{{ location.address }}</p>
+          <span ng-repeat="facility in location.facilities">
+            <span class="badge badge-info">{{ facility }}</span>
           </span>
-        </h4>
-        <p class="adress">{{ location.address }}</p>
-        <span ng-repeat="facility in location.facilities">
-          <span class="badge badge-info">{{ facility }}</span>
-        </span>
-      </li>
-    </ul>
-  </div>
-  <div class="col-xs-12 col-sm-4">
-    <p>{{ vm.sidebar }}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="col-xs-12 col-sm-4">
+      <p>{{ vm.sidebar }}</p>
+    </div>
   </div>
 </div>
+<footer-generic> </footer-generic>

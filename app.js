@@ -43,6 +43,18 @@ var uglified = uglifyJs.minify(
     "footerGeneric.directive.js": fs.readFileSync(
       "app_client/common/directives/footerGeneric/footerGeneric.directive.js",
       "utf8"
+    ),
+    "navigation.directive.js": fs.readFileSync(
+      "app_client/common/directives/navigation/navigation.directive.js",
+      "utf8"
+    ),
+    "pageHeader.directive.js": fs.readFileSync(
+      "app_client/common/directives/pageHeader/pageHeader.directive.js",
+      "utf8"
+    ),
+    "about.controller.js": fs.readFileSync(
+      "app_client/about/about.controller.js",
+      "utf8"
     )
   },
   { compress: false }
