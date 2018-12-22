@@ -9,6 +9,8 @@ require("./app_api/models/db");
 var uglifyJs = require("uglify-js");
 var fs = require("fs");
 
+var routesApi = require("./app_api/routes/index");
+
 var app = express();
 
 // view engine setup
@@ -37,6 +39,10 @@ var uglified = uglifyJs.minify(
     "ratingStars.directive.js": fs.readFileSync(
       "app_client/common/directives/ratingStars/ratingStars.directive.js",
       "utf8"
+    ),
+    "footerGeneric.directive.js": fs.readFileSync(
+      "app_client/common/directives/footerGeneric/footerGeneric.directive.js",
+      "utf8"
     )
   },
   { compress: false }
@@ -55,6 +61,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "app_client")));
+
+app.use("/api", routesApi);
 
 app.use(function(req, res) {
   res.sendFile(path.join(__dirname, "app_client", "index.html"));
