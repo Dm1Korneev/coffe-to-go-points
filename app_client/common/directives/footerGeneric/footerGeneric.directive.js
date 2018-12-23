@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").directive("footerGeneric", footerGeneric);
+  angular.module("coffeeToGoApp").directive("footerGeneric", footerGeneric);
 
   function footerGeneric() {
     return {

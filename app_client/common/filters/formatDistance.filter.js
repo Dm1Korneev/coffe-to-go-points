@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").filter("formatDistance", formatDistance);
+  angular.module("coffeeToGoApp").filter("formatDistance", formatDistance);
 
   function formatDistance() {
     return function(distance) {

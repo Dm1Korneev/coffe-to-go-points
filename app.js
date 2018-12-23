@@ -17,59 +17,7 @@ var app = express();
 app.set("views", path.join(__dirname, "app_server", "views"));
 app.set("view engine", "jade");
 
-var uglified = uglifyJs.minify(
-  {
-    "app.js": fs.readFileSync("app_client/app.js", "utf8"),
-    "home.controller.js": fs.readFileSync(
-      "app_client/home/home.controller.js",
-      "utf8"
-    ),
-    "coffeToGoData.service.js": fs.readFileSync(
-      "app_client/common/services/coffeToGoData.service.js",
-      "utf8"
-    ),
-    "geolocation.service.js": fs.readFileSync(
-      "app_client/common/services/geolocation.service.js",
-      "utf8"
-    ),
-    "formatDistance.filter.js": fs.readFileSync(
-      "app_client/common/filters/formatDistance.filter.js",
-      "utf8"
-    ),
-    "ratingStars.directive.js": fs.readFileSync(
-      "app_client/common/directives/ratingStars/ratingStars.directive.js",
-      "utf8"
-    ),
-    "footerGeneric.directive.js": fs.readFileSync(
-      "app_client/common/directives/footerGeneric/footerGeneric.directive.js",
-      "utf8"
-    ),
-    "navigation.directive.js": fs.readFileSync(
-      "app_client/common/directives/navigation/navigation.directive.js",
-      "utf8"
-    ),
-    "pageHeader.directive.js": fs.readFileSync(
-      "app_client/common/directives/pageHeader/pageHeader.directive.js",
-      "utf8"
-    ),
-    "about.controller.js": fs.readFileSync(
-      "app_client/about/about.controller.js",
-      "utf8"
-    ),
-    "details.controller.js": fs.readFileSync(
-      "app_client/details/details.controller.js",
-      "utf8"
-    )
-  },
-  { compress: false }
-);
-fs.writeFile("public/angular/CoffeToGo.min.js", uglified.code, function(error) {
-  if (error) {
-    comsole.log(error);
-  } else {
-    console.log("Script generated and saved: CoffeToGo.min.js");
-  }
-});
+buildJSFile();
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -101,3 +49,44 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+function buildJSFile() {
+  var files = {
+    "app.js": "app_client/app.js",
+    "home.controller.js": "app_client/home/home.controller.js",
+    "coffeeToGoData.service.js":
+      "app_client/common/services/coffeeToGoData.service.js",
+    "geolocation.service.js":
+      "app_client/common/services/geolocation.service.js",
+    "formatDistance.filter.js":
+      "app_client/common/filters/formatDistance.filter.js",
+    "ratingStars.directive.js":
+      "app_client/common/directives/ratingStars/ratingStars.directive.js",
+    "footerGeneric.directive.js":
+      "app_client/common/directives/footerGeneric/footerGeneric.directive.js",
+    "navigation.directive.js":
+      "app_client/common/directives/navigation/navigation.directive.js",
+    "pageHeader.directive.js":
+      "app_client/common/directives/pageHeader/pageHeader.directive.js",
+    "about.controller.js": "app_client/about/about.controller.js",
+    "details.controller.js": "app_client/details/details.controller.js",
+    "googleMap.directive.js":
+      "app_client/common/directives/googleMap/googleMap.directive.js"
+  };
+
+  setting = { "app.js": fs.readFileSync("app_client/app.js", "utf8") };
+  for (var key in files) {
+    setting[key] = fs.readFileSync(files[key], "utf8");
+  }
+
+  var uglified = uglifyJs.minify(setting, { compress: false });
+  fs.writeFile("public/angular/CoffeeToGo.min.js", uglified.code, function(
+    error
+  ) {
+    if (error) {
+      comsole.log(error);
+    } else {
+      console.log("Script generated and saved: CoffeeToGo.min.js");
+    }
+  });
+}

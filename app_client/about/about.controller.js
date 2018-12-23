@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").controller("aboutCtrl", aboutCtrl);
+  angular.module("coffeeToGoApp").controller("aboutCtrl", aboutCtrl);
 
   function aboutCtrl() {
     var vm = this;

@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").service("geolocation", geolocation);
+  angular.module("coffeeToGoApp").service("geolocation", geolocation);
 
   function geolocation() {
     getPosition = function(cbSuccess, cbError, cbNoGeo) {

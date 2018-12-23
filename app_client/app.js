@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp", ["ngRoute", "ngSanitize"]);
+  angular.module("coffeeToGoApp", ["ngRoute", "ngSanitize"]);
 
   function config($routeProvider, $locationProvider) {
     $routeProvider
@@ -26,6 +26,6 @@
   }
 
   angular
-    .module("coffeToGoApp")
+    .module("coffeeToGoApp")
     .config(["$routeProvider", "$locationProvider", config]);
 })();

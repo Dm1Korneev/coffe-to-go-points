@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").directive("ratingStars", ratingStars);
+  angular.module("coffeeToGoApp").directive("ratingStars", ratingStars);
 
   function ratingStars() {
     return {

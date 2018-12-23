@@ -1,16 +1,16 @@
 (function() {
-  angular.module("coffeToGoApp").controller("homeCtrl", homeCtrl);
+  angular.module("coffeeToGoApp").controller("homeCtrl", homeCtrl);
 
-  homeCtrl.$inject = ["$scope", "coffeToGoData", "geolocation"];
-  function homeCtrl($scope, coffeToGoData, geolocation) {
+  homeCtrl.$inject = ["$scope", "coffeeToGoData", "geolocation"];
+  function homeCtrl($scope, coffeeToGoData, geolocation) {
     var vm = this;
     vm.pageHeader = {
-      title: "Coffe to Go",
+      title: "Coffee to Go",
       strapline: "Point whith cofee near you!"
     };
     vm.sidebar = {
       first:
-        "Starcups is on Coffe To Go because it has accessible wifi and space to sit down with your laptop and get some work done.",
+        "Starcups is on Coffee To Go because it has accessible wifi and space to sit down with your laptop and get some work done.",
       second:
         "If you've been and you like it - or if you don't - please leave a review to help other people just like you."
     };
@@ -20,7 +20,7 @@
     vm.getData = function(position) {
       vm.message = "Serching for nearby places";
 
-      coffeToGoData
+      coffeeToGoData
         .locationsByCoords(position.coords.longitude, position.coords.latitude)
         .then(
           function(result) {

@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").directive("pageHeader", pageHeader);
+  angular.module("coffeeToGoApp").directive("pageHeader", pageHeader);
 
   function pageHeader() {
     return {

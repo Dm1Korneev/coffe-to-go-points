@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeToGoApp").directive("navigation", navigation);
+  angular.module("coffeeToGoApp").directive("navigation", navigation);
 
   function navigation() {
     return {
