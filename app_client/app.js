@@ -1,5 +1,5 @@
 (function() {
-  angular.module("coffeeToGoApp", ["ngRoute", "ngSanitize"]);
+  angular.module("coffeeToGoApp", ["ngRoute", "ngSanitize", "ui.bootstrap"]);
 
   function config($routeProvider, $locationProvider) {
     $routeProvider

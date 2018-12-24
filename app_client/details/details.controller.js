@@ -1,8 +1,8 @@
 (function() {
   angular.module("coffeeToGoApp").controller("detailsCtrl", detailsCtrl);
 
-  detailsCtrl.$inject = ["$scope", "$routeParams", "coffeeToGoData"];
-  function detailsCtrl($scope, $routeParams, coffeeToGoData) {
+  detailsCtrl.$inject = ["$routeParams", "$uibModal", "coffeeToGoData"];
+  function detailsCtrl($routeParams, $uibModal, coffeeToGoData) {
     var vm = this;
 
     coffeeToGoData.locationById($routeParams.locationId).then(
@@ -22,5 +22,12 @@
         vm.message = "Sorry something's gone wrong";
       }
     );
+
+    vm.popupReviewForm = function() {
+      var modalInstance = $uibModal.open({
+        templateUrl: "reviewModal/reviewModal.view.html",
+        controller: "reviewModalCtrlasvm"
+      });
+    };
   }
 })();
