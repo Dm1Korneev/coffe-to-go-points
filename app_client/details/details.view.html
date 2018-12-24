@@ -69,7 +69,7 @@
                     <small rating-stars rating="review.rating"></small>
                     <span class="reviewAuthor">{{ review.author }}</span>
                     <small class="reviewTimestamp">{{
-                      review.createdOn
+                      review.createdOn | date: "d MMMM yyyy"
                     }}</small>
                   </div>
                   <div class="col-xs-12">
