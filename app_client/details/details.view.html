@@ -14,8 +14,16 @@
           <div class="card bg-light">
             <h4 class="card-header">Opening hours</h4>
             <div class="card-body">
-              <p ng-repeat="openingTime in vm.location.openingTimes">
-                {{ openingTime }}
+              <p
+                ng-repeat="openingTime in vm.location.openingTimes"
+                ng-switch
+                on="openingTime.closed"
+              >
+                {{ openingTime.days }}:
+                <span ng-switch-when="true">closed</span>
+                <span ng-switch-default
+                  >{{ openingTime.opening }} - {{ openingTime.closing }}</span
+                >
               </p>
             </div>
           </div>
@@ -33,8 +41,8 @@
             <h4 class="card-header">Location map</h4>
             <div class="card-body map-card">
               <google-map
-                lat="{{ vm.location.coords[0] }}"
-                lng="{{ vm.location.coords[1] }}"
+                lng="vm.location.coords[0]"
+                lat="vm.location.coords[1]"
               ></google-map>
             </div>
           </div>

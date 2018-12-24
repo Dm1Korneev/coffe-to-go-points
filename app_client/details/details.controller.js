@@ -17,22 +17,6 @@
           second:
             "If you've been and you like it - or if you don't - please leave a review to help other people just like you."
         };
-
-        // function initMap() {
-        //   new google.maps.Map(document.getElementById("map"), {
-        //     center: {
-        //       lat: result.data.coords[1],
-        //       lng: result.data.coords[0]
-        //     },
-        //     zoom: 13
-        //   });
-        // }
-
-        // $scope.$watch("$viewContentLoaded", function() {
-        //   setTimeout(function() {
-        //     initMap();
-        //   }, 1000);
-        // });
       },
       function(err) {
         vm.message = "Sorry something's gone wrong";
