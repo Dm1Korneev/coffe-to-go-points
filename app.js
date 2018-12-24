@@ -84,7 +84,7 @@ function buildJSFile() {
     error
   ) {
     if (error) {
-      comsole.log(error);
+      console.log(error);
     } else {
       console.log("Script generated and saved: CoffeeToGo.min.js");
     }
