@@ -60,7 +60,10 @@
               >
             </h4>
             <div class="card-body review-container">
-              <div class="row" ng-repeat="review in vm.location.reviews">
+              <div
+                class="row"
+                ng-repeat="review in vm.location.reviews | orderBy: 'createdOn':true"
+              >
                 <div class="review">
                   <div class="well well-sm review-header">
                     <small rating-stars rating="review.rating"></small>
