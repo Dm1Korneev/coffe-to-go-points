@@ -79,6 +79,8 @@ function buildJSFile() {
     setting[key] = fs.readFileSync(files[key], "utf8");
   }
 
+  mkdirSync("public/angular");
+
   var uglified = uglifyJs.minify(setting, { compress: false });
   fs.writeFile("public/angular/CoffeeToGo.min.js", uglified.code, function(
     error
@@ -89,4 +91,12 @@ function buildJSFile() {
       console.log("Script generated and saved: CoffeeToGo.min.js");
     }
   });
+}
+
+function mkdirSync(dirPath) {
+  try {
+    fs.mkdirSync(dirPath);
+  } catch (err) {
+    if (err.code !== "EEXIST") throw err;
+  }
 }
