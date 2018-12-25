@@ -71,7 +71,9 @@ function buildJSFile() {
     "about.controller.js": "app_client/about/about.controller.js",
     "details.controller.js": "app_client/details/details.controller.js",
     "googleMap.directive.js":
-      "app_client/common/directives/googleMap/googleMap.directive.js"
+      "app_client/common/directives/googleMap/googleMap.directive.js",
+    "reviewModal.controller.js":
+      "app_client/reviewModal/reviewModal.controller.js"
   };
 
   setting = { "app.js": fs.readFileSync("app_client/app.js", "utf8") };

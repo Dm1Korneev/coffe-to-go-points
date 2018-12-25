@@ -26,7 +26,21 @@
     vm.popupReviewForm = function() {
       var modalInstance = $uibModal.open({
         templateUrl: "reviewModal/reviewModal.view.html",
-        controller: "reviewModalCtrlasvm"
+        controller: "reviewModalCtrl",
+        controllerAs: "vm",
+        animation: true
+      });
+
+      modalInstance.result.catch(function(res) {
+        if (
+          !(
+            res === "cancel" ||
+            res === "escape key press" ||
+            res === "backdrop click"
+          )
+        ) {
+          throw res;
+        }
       });
     };
   }
