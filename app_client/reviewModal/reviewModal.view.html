@@ -1,6 +1,9 @@
-<form action="" , method="post" , role="form" id="addReview">
-  <h1 class="modal-header">Review {{ LocationName }}</h1>
+<form role="form" id="addReview" ng-submit="vm.onSubmit()">
+  <h1 class="modal-header">Review {{ vm.LocationName }}</h1>
   <div class="modal-body">
+    <div class="alert alert-danger" role="alert" ng-show="vm.formError">
+      {{ vm.formError }}
+    </div>
     <div class="form-group row">
       <label for="author" class="col-xs-12 col-sm-2 col-form-label">Name</label>
       <div class="col-xs-12 col-sm-10">
@@ -33,33 +36,28 @@
       </div>
     </div>
     <div class="form-group row">
-      <label
-        for="reviewtext"
-        class="col-sm-2 col-form-label"
-        ng-model="vm.formData.reviewtext"
-        >Review</label
-      >
+      <label for="reviewtext" class="col-sm-2 col-form-label">Review</label>
       <div class="col-sm-12">
         <textarea
           name="reviewtext"
           id="review"
           rows="5"
           class="form-control"
+          ng-model="vm.formData.reviewText"
         ></textarea>
       </div>
     </div>
   </div>
   <div class="modal-footer">
-    <input
+    <button
       type="button"
-      value="Cancel"
       class="btn btn-default float-right"
       ng-click="vm.modal.cancel()"
-    />
-    <input
-      type="submit"
-      value="Add my review"
-      class="btn btn-info float-right"
-    />
+    >
+      Cancel
+    </button>
+    <button type="submit" class="btn btn-info float-right">
+      Add my review
+    </button>
   </div>
 </form>

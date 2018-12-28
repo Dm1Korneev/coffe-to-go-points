@@ -56,10 +56,12 @@ function doSetAverageRating(locationId, AvgRating) {
 
 function doAddReview(req, res, location) {
   if (location) {
+    console.log("req.body", req.body);
+
     location.reviews.push({
       author: req.body.author,
       rating: parseInt(req.body.rating),
-      reviewtext: req.body.reviewtext
+      reviewtext: req.body.reviewText
     });
     location.save(function(err, location) {
       if (!err) {

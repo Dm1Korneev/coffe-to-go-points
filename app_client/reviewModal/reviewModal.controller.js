@@ -3,14 +3,52 @@
     .module("coffeeToGoApp")
     .controller("reviewModalCtrl", reviewModalCtrl);
 
-  reviewModalCtrl.$inject = ["$uibModalInstance"];
-  function reviewModalCtrl($uibModalInstance) {
+  reviewModalCtrl.$inject = [
+    "$uibModalInstance",
+    "locationData",
+    "coffeeToGoData"
+  ];
+  function reviewModalCtrl($uibModalInstance, locationData, coffeeToGoData) {
     var vm = this;
+    vm.LocationName = locationData.locationName;
 
     vm.modal = {
       cancel: function() {
         $uibModalInstance.dismiss("cancel");
+      },
+
+      close: function(result) {
+        $uibModalInstance.close(result);
       }
+    };
+
+    vm.onSubmit = function() {
+      vm.formError = "";
+      if (
+        !vm.formData ||
+        !vm.formData.name ||
+        !vm.formData.rating ||
+        !vm.formData.reviewText
+      ) {
+        vm.formError = "All fields required, please try again";
+      } else {
+        coffeeToGoData
+          .addReviewById(locationData.locationId, {
+            author: vm.formData.name,
+            reviewText: vm.formData.reviewText,
+            rating: vm.formData.rating
+          })
+          .then(
+            function(result) {
+              vm.modal.close(result.data);
+            },
+            function(err) {
+              vm.formError = "Sorry something's gone wrong";
+            }
+          );
+        return false;
+      }
+      return false;
     };
 
     var url = "/javascripts/validation.js";

@@ -4,6 +4,7 @@
   detailsCtrl.$inject = ["$routeParams", "$uibModal", "coffeeToGoData"];
   function detailsCtrl($routeParams, $uibModal, coffeeToGoData) {
     var vm = this;
+    vm.locationId = $routeParams.locationId;
 
     coffeeToGoData.locationById($routeParams.locationId).then(
       function(result) {
@@ -28,20 +29,32 @@
         templateUrl: "reviewModal/reviewModal.view.html",
         controller: "reviewModalCtrl",
         controllerAs: "vm",
-        animation: true
-      });
-
-      modalInstance.result.catch(function(res) {
-        if (
-          !(
-            res === "cancel" ||
-            res === "escape key press" ||
-            res === "backdrop click"
-          )
-        ) {
-          throw res;
+        animation: true,
+        resolve: {
+          locationData: function() {
+            return {
+              locationId: vm.locationId,
+              locationName: vm.location.name
+            };
+          }
         }
       });
+
+      modalInstance.result
+        .then(function(data) {
+          vm.location.reviews.push(data);
+        })
+        .catch(function(res) {
+          if (
+            !(
+              res === "cancel" ||
+              res === "escape key press" ||
+              res === "backdrop click"
+            )
+          ) {
+            throw res;
+          }
+        });
     };
   }
 })();
