@@ -11,28 +11,34 @@ var userSchema = new mongoose.Schema({
 
 userSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString("hex");
-  this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString("hex");
+  this.hash = crypto
+    .pbkdf2Sync(password, this.salt, 1000, 64, "sha512")
+    .toString("hex");
 };
 
 userSchema.methods.validPassword = function(password) {
-  thash = crypto.pbkdf2Sync(password, this.salt, 1000, 64).toString("hex");
+  hash = crypto
+    .pbkdf2Sync(password, this.salt, 1000, 64, "sha512")
+    .toString("hex");
 
   return hash === this.hash;
 };
 
 userSchema.methods.generateJwt = function() {
   var expiry = new Date();
-  expiry.setDate(expiry.getDate + 7);
+  expiry.setDate(expiry.getDate() + 7);
+
+  console.log(1, expiry.getTime() / 1000);
 
   return jwt.sign(
     {
       _id: this._id,
       email: this.email,
       name: this.name,
-      exp: expiry.getTime() / 1000
+      exp: parseInt(expiry.getTime() / 1000)
     },
     process.env.JWT_SECRET
   );
 };
 
-mongoose.model("user", userSchema);
+mongoose.model("User", userSchema);

@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var LocationModel = mongoose.model("Location");
+var UserModel = mongoose.model("User");
 
 function sendJsResponse(res, status, content) {
   res.status(status);
@@ -54,12 +55,12 @@ function doSetAverageRating(locationId, AvgRating) {
   );
 }
 
-function doAddReview(req, res, location) {
+function doAddReview(req, res, location, userName) {
   if (location) {
     console.log("req.body", req.body);
 
     location.reviews.push({
-      author: req.body.author,
+      author: userName,
       rating: parseInt(req.body.rating),
       reviewtext: req.body.reviewText
     });
@@ -78,20 +79,42 @@ function doAddReview(req, res, location) {
 }
 
 module.exports.reviewsCreate = function(req, res, next) {
-  if (req.params.locationId) {
-    LocationModel.findById(req.params.locationId)
-      .select("reviews")
-      .exec(function(err, location) {
-        if (!err) {
-          doAddReview(req, res, location);
-        } else {
-          sendJsResponse(res, 400, err);
-        }
-      });
-  } else {
-    sendJsResponse(res, 400, { message: "No locationId in request" });
-  }
+  getAuthor(req, res, function(req, res, userName) {
+    if (req.params.locationId) {
+      LocationModel.findById(req.params.locationId)
+        .select("reviews")
+        .exec(function(err, location) {
+          if (!err) {
+            doAddReview(req, res, location, userName);
+          } else {
+            sendJsResponse(res, 400, err);
+          }
+        });
+    } else {
+      sendJsResponse(res, 400, { message: "No locationId in request" });
+    }
+  });
 };
+
+function getAuthor(req, res, callback) {
+  if (!req.payload || !req.payload.email) {
+    sendJsResponse(res, 404, { message: "User not found" });
+    return;
+  }
+
+  UserModel.findOne({ email: req.payload.email }).exec(function(err, user) {
+    if (err) {
+      sendJsResponse(res, 404, err);
+      return;
+    }
+    if (!user) {
+      sendJsResponse(res, 404, { message: "User not found" });
+      return;
+    }
+
+    callback(req, res, user.name);
+  });
+}
 
 module.exports.reviewsReadOne = function(req, res, next) {
   if (req.params && req.params.locationId && req.params.reviewId) {

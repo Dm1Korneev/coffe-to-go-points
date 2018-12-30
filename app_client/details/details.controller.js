@@ -1,10 +1,26 @@
 (function() {
   angular.module("coffeeToGoApp").controller("detailsCtrl", detailsCtrl);
 
-  detailsCtrl.$inject = ["$routeParams", "$uibModal", "coffeeToGoData"];
-  function detailsCtrl($routeParams, $uibModal, coffeeToGoData) {
+  detailsCtrl.$inject = [
+    "$routeParams",
+    "$uibModal",
+    "coffeeToGoData",
+    "$location",
+    "authentication"
+  ];
+  function detailsCtrl(
+    $routeParams,
+    $uibModal,
+    coffeeToGoData,
+    $location,
+    authentication
+  ) {
     var vm = this;
+
     vm.locationId = $routeParams.locationId;
+
+    vm.currentPath = $location.path();
+    vm.isLoggedIn = authentication.isLoggedIn();
 
     coffeeToGoData.locationById($routeParams.locationId).then(
       function(result) {

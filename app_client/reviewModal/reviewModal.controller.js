@@ -24,17 +24,11 @@
 
     vm.onSubmit = function() {
       vm.formError = "";
-      if (
-        !vm.formData ||
-        !vm.formData.name ||
-        !vm.formData.rating ||
-        !vm.formData.reviewText
-      ) {
+      if (!vm.formData || !vm.formData.rating || !vm.formData.reviewText) {
         vm.formError = "All fields required, please try again";
       } else {
         coffeeToGoData
           .addReviewById(locationData.locationId, {
-            author: vm.formData.name,
             reviewText: vm.formData.reviewText,
             rating: vm.formData.rating
           })

@@ -16,6 +16,23 @@
       <ul class="navbar-nav mr-auto">
         <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
       </ul>
+      <ul class="navbar-nav mr-2">
+        <li class="nav-item" ng-hide="navvm.isLoggedIn">
+          <a href="/login?page={{ navvm.currentPath }}" class="nav-link"
+            >Sign in</a
+          >
+        </li>
+        <li class="nav-item dropdown" ng-show="navvm.isLoggedIn">
+          <a href="" class="nav-link dropdown-toggle" data-toggle="dropdown"
+            >{{ navvm.currentUser.name }} <span class="caret"></span
+          ></a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a href="" class="dropdown-item" ng-click="navvm.logout()"
+              >Logout</a
+            >
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

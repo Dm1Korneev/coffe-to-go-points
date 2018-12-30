@@ -1,8 +1,8 @@
 (function() {
   angular.module("coffeeToGoApp").service("coffeeToGoData", coffeeToGoData);
 
-  coffeeToGoData.$inject = ["$http"];
-  function coffeeToGoData($http) {
+  coffeeToGoData.$inject = ["$http", "authentication"];
+  function coffeeToGoData($http, authentication) {
     locationsByCoords = function(lng, lat) {
       return $http.get(
         "/api/locations?lng=" + lng + "&lat=" + lat + "&maxDistance=2000"
@@ -14,7 +14,11 @@
     };
 
     addReviewById = function(locationId, data) {
-      return $http.post("/api/locations/" + locationId + "/reviews", data);
+      return $http.post("/api/locations/" + locationId + "/reviews", data, {
+        headers: {
+          Authorization: "Bearer " + authentication.getToken()
+        }
+      });
     };
 
     return {
